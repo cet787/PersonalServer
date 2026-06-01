@@ -19,11 +19,16 @@ async fn health() -> Json<Status> {
 
 #[tokio::main]
 async fn main() {
+    let port = std::env::var("PORT")
+        .unwrap_or("3000".to_string())
+        .parse()
+        .unwrap();
+    
     let app = Router::new()
         .route("/health", get(health));
 
     let listener =
-        TcpListener::bind("0.0.0.0:3000")
+        TcpListener::bind(("0.0.0.0", port))
             .await
             .unwrap();
 
